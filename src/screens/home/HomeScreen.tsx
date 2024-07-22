@@ -1,18 +1,20 @@
 /**
  * Page: Home Screen 
- * Description: User land on this page after app launch. Show welcome message and instructions to proceed usage with the app. 
+ * Description: 
+ *  User land on this page after app launch.
+ *  Show welcome message and instructions to proceed usage with the app. 
  */
 
 import React from 'react';
 import {
     StyleSheet,
-    Text,
     View,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TextGlobal from '../../components/ui/TextGlobal';
 import ButtonGlobal from '../../components/ui/ButtonGlobal';
 import { HomeScreenModel } from './HomeScreenModel';
+import HeaderLogo from '../../components/headerLogo/HeaderLogo';
 
 type RootStackParamList = {
     Home: undefined;
@@ -28,46 +30,30 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
     };
     return (
         <View style={styles.homeContainer}>
+            <HeaderLogo />
             <TextGlobal
-                style={styles.homeTitle}>
-                {HomeScreenModel.pageTitle}
-            </TextGlobal>
-            <TextGlobal
-                style={
-                    styles.homeDescription
-                }>
+                variant="titleLarge"
+                style={{ textAlign: 'center', marginVertical: 20 }}>
                 {HomeScreenModel.description}
             </TextGlobal>
-            <TextGlobal
-                style={
-                    styles.homeDescription
-                }>
-                {HomeScreenModel.guideText}
-            </TextGlobal>
-            <ButtonGlobal label="Start" onPress={handleButtonPress} />
+            <View style={{position: 'absolute', bottom: 90}}>
+                <TextGlobal
+                    variant="titleSmall"
+                    style={{ marginBottom: 5 }}>
+                    {HomeScreenModel.guideText}
+                </TextGlobal>
+                <ButtonGlobal mode="contained" onPress={handleButtonPress}>{HomeScreenModel.buttonLabel}</ButtonGlobal>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     homeContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    homeTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-        textAlign: 'center',
-        color: 'red'
-    },
-    homeDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-        color: 'grey'
+        marginTop: 32,
     },
 });
 

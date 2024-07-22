@@ -4,60 +4,66 @@
  * This reusable component is a pure component. 
  * Returns react elements for question and multiple choice options.
  */
-
 import React, { useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View,
-} from 'react-native';
-import { RadioButton } from 'react-native-paper';
-import { Colors, } from 'react-native/Libraries/NewAppScreen';
+import { View } from 'react-native';
+import { Button, RadioButton, Text } from 'react-native-paper';
 import { QuestionnaireInterface } from './QuestionnaireInterface';
 
-
-const QuestionnaireComponent = ({ id, question, options }: QuestionnaireInterface): React.JSX.Element => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
-    const handleSelectOption = (questionId: string, optionPoints: number) => {
-        setSelectedOptions(prev => ({ ...prev, [questionId]: optionPoints }));
-    };
-    return (
-        <View style={styles.QuestionnaireContainer}>
-            <View key={id}>
-                <Text>{question}</Text>
-                {options.map(option => (
-                    <RadioButton.Item
-                        key={option.id}
-                        label={option.text}
-                        value={option.id}
-                        status={selectedOptions[id] === option.points ? 'checked' : 'unchecked'}
-                        onPress={() => handleSelectOption(id, option.points)}
-                    />
-                ))}
-            </View>
-        </View>
-    );
+interface QuestionnaireProps {
+  questions: QuestionnaireInterface[];
+  onCompleted: (results: { totalScore: number; riskProfileCategory: string }) => void;
 }
 
-const styles = StyleSheet.create({
-    QuestionnaireContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    QuestionnaireTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    QuestionnaireDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
-    },
-});
+const QuestionnaireComponent: React.FC<QuestionnaireProps> = ({ questions, onCompleted }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
+
+  const handleSelectOption = (questionId: string, optionPoints: number) => {
+    setSelectedOptions(prev => ({ ...prev, [questionId]: optionPoints }));
+  };
+
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
+    const riskProfileCategory = totalScore <= 10 ? 'Low' : totalScore <= 20 ? 'Low to Medium' : totalScore <= 30 ? 'Medium' : totalScore <= 40 ? 'Medium to High' : 'High';
+    onCompleted({ totalScore, riskProfileCategory });
+  };
+
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  return (
+    <View>
+      <View key={questions[currentQuestionIndex].id}>
+        <Text variant="headlineMedium">{questions[currentQuestionIndex].question}</Text>
+        <View style={{ height: 10 }} />
+        {questions[currentQuestionIndex].options.map(option => (
+          <RadioButton.Item
+            key={option.id}
+            label={option.text}
+            value={option.id}
+            status={selectedOptions[questions[currentQuestionIndex].id] === option.points ? 'checked' : 'unchecked'}
+            onPress={() => handleSelectOption(questions[currentQuestionIndex].id, option.points)}
+          />
+        ))}
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
+        {currentQuestionIndex > 0 && <Button mode="contained" onPress={handleBack}>{"Back"}</Button>}
+        {!isLastQuestion && <Button mode="contained" onPress={handleNext}>{"Next"}</Button>}
+        {isLastQuestion && <Button mode="contained" onPress={handleSubmit}>{"Submit"}</Button>}
+      </View>
+    </View>
+  );
+};
 
 export default QuestionnaireComponent;

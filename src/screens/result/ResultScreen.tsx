@@ -7,67 +7,75 @@
 import React from 'react';
 import {
     StyleSheet,
-    Text,
+    TouchableOpacity,
     useColorScheme,
     View,
+    Image
 } from 'react-native';
-import { Colors, } from 'react-native/Libraries/NewAppScreen';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import TextGlobal from '../../components/ui/TextGlobal';
+import InfoModal from './InfoModal';
+import { RouteProp } from '@react-navigation/native';
 import { ResultModel } from './ResultModel';
-import { Button } from 'react-native-paper';
+import { Card } from 'react-native-paper';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import HeaderLogo from '../../components/headerLogo/HeaderLogo';
 
 type RootStackParamList = {
-    Result: undefined;
+    Result: { results: { totalScore: number; riskProfileCategory: string } };
     Assessment: undefined;
 };
 
-type ResultProps = NativeStackScreenProps<RootStackParamList, 'Result'>;
+type ResultProps = {
+    route: RouteProp<RootStackParamList, 'Result'>;
+    navigation: NativeStackNavigationProp<RootStackParamList, 'Result'>;
+};
 
-const ResultScreen: React.FC<ResultProps> = ({ navigation }) => {
+const ResultScreen: React.FC<ResultProps> = ({ route, navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
+    const { totalScore, riskProfileCategory } = route.params.results;
+    const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
+
+    const showModal = () => setInfoModalVisible(true);
+    const hideModal = () => setInfoModalVisible(false);
+
     return (
-        <View style={styles.ResultContainer}>
-            <Text
-                style={[
-                    styles.ResultTitle,
-                    {
-                        color: isDarkMode ? Colors.white : Colors.black,
-                    },
-                ]}>
-                {ResultModel.pageTitle}
-            </Text>
-            <Text
-                style={[
-                    styles.ResultDescription,
-                    {
-                        color: isDarkMode ? Colors.light : Colors.dark,
-                    },
-                ]}>
-                {ResultModel.description}
-            </Text>
-            <Button
-                onPress={() => navigation.navigate('Assessment')}
-            >Go to Assessment</Button>
+        <View style={styles.resultContainer}>
+            <InfoModal isVisible={isInfoModalVisible} hideModal={hideModal} />
+            <HeaderLogo />
+            <TextGlobal
+                variant="titleLarge"
+                style={{ textAlign: 'center' }}
+            >{ResultModel.description}
+            </TextGlobal>
+            <Card style={{ marginVertical: 20, bottom: -50 }}>
+                <Card.Content>
+                    <View style={{ alignItems: 'center' }}>
+                        <TextGlobal variant="titleLarge">{'Your Total Score: '}</TextGlobal>
+                        <TextGlobal style={{fontWeight: 'bold'}} variant="titleLarge">{totalScore}</TextGlobal>
+                    </View>
+                    <View style={{ marginTop: 10, alignItems: 'center' }}>
+                        <TextGlobal variant="titleLarge">{'Your Risk Profile Category: '}</TextGlobal>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextGlobal style={{fontWeight: 'bold'}} variant="titleLarge">{riskProfileCategory}</TextGlobal>
+                            {/* Information Icon */}
+                            <TouchableOpacity onPress={() => showModal()}>
+                                <Image style={{ tintColor: 'blue', width: 30, height: 30, marginLeft: 3 }} source={require('../../assets/icon-info.png')} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Card.Content>
+            </Card>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    ResultContainer: {
+    resultContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    ResultTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    ResultDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
+        paddingHorizontal: 30,
     },
 });
 

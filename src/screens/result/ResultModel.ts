@@ -5,8 +5,7 @@
  */
 
 export const ResultModel = {
-    pageTitle:"Risk Profiler",
-    description:"Welcome to User Risk Profile Questionnaire app.",
-    guideText:"Let's assess your Risk appetite. Press Begin to start.",
-    beginButtonLabel : "Begin"
+    description: "Kudos! for successfully completing the assessment.",
+    guideText: "Your Risk Score",
+    retakeButtonLabel: "Retake Assessment"
 }

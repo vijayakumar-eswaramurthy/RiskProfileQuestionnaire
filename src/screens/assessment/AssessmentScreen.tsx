@@ -6,75 +6,50 @@
  * User can submit and navigate to Results screen.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
-    Text,
     useColorScheme,
-    ScrollView,
+    View,
 } from 'react-native';
-import { Colors, } from 'react-native/Libraries/NewAppScreen';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import QuestionnaireComponent from '../../components/QuestionnaireComponent/QuestionnaireComponent';
 import { questionsModel } from './AssessmentModel';
+import HeaderLogo from '../../components/headerLogo/HeaderLogo';
 
 type RootStackParamList = {
     Assessment: undefined;
+    Result: { results: { totalScore: number; riskProfileCategory: string } };
 };
 
-type AssessmentProps = NativeStackScreenProps<RootStackParamList, 'Assessment'>;
+type AssessmentProps = {
+    route: RouteProp<RootStackParamList, 'Assessment'>;
+    navigation: NativeStackNavigationProp<RootStackParamList, 'Assessment'>;
+};
 
-const AssessmentScreen: React.FC<AssessmentProps> = ({ navigation }) => {
+const AssessmentScreen: React.FC<AssessmentProps> = ({ route, navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
+    const onCompleted = (results: { totalScore: number; riskProfileCategory: string }) => {
+        // Navigate to Results Screen with results
+        navigation.navigate('Result', { results });
+    }
+
     return (
-        <ScrollView style={styles.AssessmentContainer}>
-            {questionsModel.map(questionData => (
-                <QuestionnaireComponent id={questionData.id} question={questionData.question} options={questionData.options}/>
-            ))}
-        </ScrollView>
+        <View style={styles.AssessmentContainer}>
+            <HeaderLogo/>
+            <QuestionnaireComponent questions={questionsModel} onCompleted={onCompleted} />
+        </View>
     );
 }
 
-/**
- * 
-        <View style={styles.AssessmentContainer}>
-            <Text
-                style={[
-                    styles.AssessmentTitle,
-                    {
-                        color: isDarkMode ? Colors.white : Colors.black,
-                    },
-                ]}>
-                {'asdas'}
-            </Text>
-            <Text
-                style={[
-                    styles.AssessmentDescription,
-                    {
-                        color: isDarkMode ? Colors.light : Colors.dark,
-                    },
-                ]}>
-                {'asdasd'}
-            </Text>
-        </View>
- */
-
 const styles = StyleSheet.create({
     AssessmentContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    AssessmentTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    AssessmentDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
+        paddingHorizontal: 30,
     },
 });
 

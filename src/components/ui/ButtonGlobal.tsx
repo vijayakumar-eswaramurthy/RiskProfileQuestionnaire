@@ -1,18 +1,19 @@
-import * as React from 'react';
-import { Button } from 'react-native-paper';
+/**
+ * Component : ButtonGlobal
+ * Description: 
+ *  This is a pure, reusable component. 
+ *  Using React.memo for performance optimization. 
+ */
+import React from 'react';
+import { Button as PaperButton, ButtonProps } from 'react-native-paper';
 
-interface ButtonGlobalProps {
-  label: string;
-  onPress: () => void;
+// Define the props for the ButtonGlobal component, extending the ButtonProps from react-native-paper
+interface ButtonGlobalProps extends ButtonProps {
+  // add any additional props if required to pass to the Button component here
 }
 
-const ButtonGlobal: React.FC<ButtonGlobalProps> = ({ label, onPress }) => {
-  return (
-    <Button style={{margin:10}} mode="contained" onPress={onPress}>
-      {label}
-    </Button>
-  );
-};
-
+const ButtonGlobal: React.FC<ButtonGlobalProps> = React.memo(({ children, ...rest }) => {
+  return <PaperButton {...rest}>{children}</PaperButton>;
+});
 
 export default ButtonGlobal;

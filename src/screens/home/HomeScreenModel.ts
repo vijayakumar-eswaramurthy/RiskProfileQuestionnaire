@@ -5,8 +5,7 @@
  */
 
 export const HomeScreenModel = {
-    pageTitle:"Risk Profiler",
-    description:"Welcome to User Risk Profile Questionnaire",
+    description:"Welcome to User Risk Profile Questionnaire app to assess you risk appetite. ",
     guideText:"Press Start to begin.",
-    beginButtonLabel : "Proceed"
+    buttonLabel : "Start"
 }
