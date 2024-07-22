@@ -11,11 +11,12 @@ import {
     StyleSheet,
     Text,
     useColorScheme,
-    View,
+    ScrollView,
 } from 'react-native';
 import { Colors, } from 'react-native/Libraries/NewAppScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {AssessmentModel} from './AssessmentModel';
+import QuestionnaireComponent from '../../components/QuestionnaireComponent/QuestionnaireComponent';
+import { questionsModel } from './AssessmentModel';
 
 type RootStackParamList = {
     Assessment: undefined;
@@ -26,6 +27,16 @@ type AssessmentProps = NativeStackScreenProps<RootStackParamList, 'Assessment'>;
 const AssessmentScreen: React.FC<AssessmentProps> = ({ navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
+        <ScrollView style={styles.AssessmentContainer}>
+            {questionsModel.map(questionData => (
+                <QuestionnaireComponent id={questionData.id} question={questionData.question} options={questionData.options}/>
+            ))}
+        </ScrollView>
+    );
+}
+
+/**
+ * 
         <View style={styles.AssessmentContainer}>
             <Text
                 style={[
@@ -34,7 +45,7 @@ const AssessmentScreen: React.FC<AssessmentProps> = ({ navigation }) => {
                         color: isDarkMode ? Colors.white : Colors.black,
                     },
                 ]}>
-                {AssessmentModel.pageTitle}
+                {'asdas'}
             </Text>
             <Text
                 style={[
@@ -43,11 +54,10 @@ const AssessmentScreen: React.FC<AssessmentProps> = ({ navigation }) => {
                         color: isDarkMode ? Colors.light : Colors.dark,
                     },
                 ]}>
-                {AssessmentModel.description}
+                {'asdasd'}
             </Text>
         </View>
-    );
-}
+ */
 
 const styles = StyleSheet.create({
     AssessmentContainer: {
