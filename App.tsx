@@ -11,7 +11,7 @@ import NavigationStack from './src/navigation/NavigationStack';
 
 function App(): React.JSX.Element {
   return (
-    <NavigationStack />
+    <NavigationStack testID='navigation-stack'/>
   );
 }
 

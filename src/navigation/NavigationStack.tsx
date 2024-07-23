@@ -37,14 +37,18 @@ import ResultScreen from '../screens/result/ResultScreen';
 type RootStackParamList = {
   Home: undefined;
   Assessment: undefined;
-  Result: undefined;
+  Result: { results: { totalScore: number; riskProfileCategory: string } };
 };
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+type NavigationStackProps = {
+  testID : string;
+}
+
 // Define the navigator component
-const NavigationStack: React.FC = () => {
+const NavigationStack: React.FC<NavigationStackProps> = ({testID}) => {
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
       <Stack.Navigator
