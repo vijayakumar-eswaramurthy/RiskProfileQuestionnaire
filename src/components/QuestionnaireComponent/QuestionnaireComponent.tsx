@@ -4,9 +4,9 @@
  * This reusable component is a pure component. 
  * Returns react elements for question and multiple choice options.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Button, RadioButton, Text } from 'react-native-paper';
+import { Button, HelperText, RadioButton, Text } from 'react-native-paper';
 import { QuestionnaireInterface } from './QuestionnaireInterface';
 
 interface QuestionnaireProps {
@@ -17,13 +17,22 @@ interface QuestionnaireProps {
 const QuestionnaireComponent: React.FC<QuestionnaireProps> = ({ questions, onCompleted }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
+  const [isShowHelper, setShowHelper] = useState(false);
+
+  useEffect(() => {
+    if (selectedOptions[questions[currentQuestionIndex].id] !== undefined) {
+      setShowHelper(false);
+    }
+  }, [currentQuestionIndex,selectedOptions]);
 
   const handleSelectOption = (questionId: string, optionPoints: number) => {
     setSelectedOptions(prev => ({ ...prev, [questionId]: optionPoints }));
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (selectedOptions[questions[currentQuestionIndex].id] === undefined) {
+      setShowHelper(true);
+    } else if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -56,6 +65,11 @@ const QuestionnaireComponent: React.FC<QuestionnaireProps> = ({ questions, onCom
             onPress={() => handleSelectOption(questions[currentQuestionIndex].id, option.points)}
           />
         ))}
+      </View>
+      <View>
+        {isShowHelper ? (<HelperText type="error" visible={true}>
+          {'Please select an option to proceed.'}
+        </HelperText>) : null}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
         {currentQuestionIndex > 0 && <Button mode="contained" onPress={handleBack}>{"Back"}</Button>}
