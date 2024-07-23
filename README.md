@@ -4,9 +4,11 @@
 https://github.com/user-attachments/assets/9f7c7fbe-51f0-487b-8148-518186c4cf64
 
 
-## Getting Started - To run the project in your local follow below instructions
+## Getting Started
+To run the project in your local follow below instructions
 
-## Step 1: Get the code from this repo and install the npm modules.
+## Step 1: 
+Get the Source Code and Install the dependencies. 
 
 ## Step 2: Start the Metro Server
 
