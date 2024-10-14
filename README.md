@@ -1,7 +1,7 @@
 # User Risk Profiler App - Developed for Client evaluation
 
 ## Project Description:
-This Risk Profiler app will help users determine thier risk profile for opening a bank account.
+This Risk Profiler app will help users determine their risk profile for opening a bank account.
 
 This app will guide users through a series of questions related to their investment preferences and calculate a risk profile score and category based on their answers.
 
