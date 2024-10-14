@@ -23,6 +23,7 @@ const CustomDarkTheme: Theme = {// Define custom themes with TypeScript types
     ...DarkTheme.colors,
     primary: 'black',
     background: 'black',
+    text: 'white',
     // ... other colors
   },
 };
@@ -43,12 +44,8 @@ type RootStackParamList = {
 // Create the stack navigator
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-type NavigationStackProps = {
-  testID : string;
-}
-
 // Define the navigator component
-const NavigationStack: React.FC<NavigationStackProps> = ({testID}) => {
+const NavigationStack: React.FC = () => {
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
       <Stack.Navigator
