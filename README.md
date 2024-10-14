@@ -8,6 +8,8 @@ This app will guide users through a series of questions related to their investm
 ## Demo 
 https://github.com/user-attachments/assets/9f7c7fbe-51f0-487b-8148-518186c4cf64
 
+## Unit Test Coverage
+![Screenshot 2024-10-15 011909](https://github.com/user-attachments/assets/17f1fe1c-99bd-409e-a0cc-031f6eb8f9f7)
 
 ## Getting Started
 To run the project in your local follow below instructions
