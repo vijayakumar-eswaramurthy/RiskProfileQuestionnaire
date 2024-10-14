@@ -8,7 +8,6 @@ import React from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
-    useColorScheme,
     View,
     Image
 } from 'react-native';
@@ -19,6 +18,7 @@ import { ResultModel } from './ResultModel';
 import { Card } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import HeaderLogo from '../../components/headerLogo/HeaderLogo';
+import { useTheme } from '@react-navigation/native';
 
 type RootStackParamList = {
     Result: { results: { totalScore: number; riskProfileCategory: string } };
@@ -31,7 +31,7 @@ type ResultProps = {
 };
 
 const ResultScreen: React.FC<ResultProps> = ({ route, navigation }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colors} = useTheme();
     const { totalScore, riskProfileCategory } = route.params.results;
     const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
 
@@ -47,7 +47,7 @@ const ResultScreen: React.FC<ResultProps> = ({ route, navigation }) => {
                 style={{ textAlign: 'center' }}
             >{ResultModel.description}
             </TextGlobal>
-            <Card style={{ marginVertical: 20, bottom: -50 }}>
+            <Card style={{ marginVertical: 20, bottom: -50, backgroundColor: colors.background}}>
                 <Card.Content>
                     <View style={{ alignItems: 'center' }}>
                         <TextGlobal variant="titleLarge">{'Your Total Score: '}</TextGlobal>
@@ -58,7 +58,7 @@ const ResultScreen: React.FC<ResultProps> = ({ route, navigation }) => {
                         <View style={{ flexDirection: 'row' }}>
                             <TextGlobal style={{fontWeight: 'bold'}} variant="titleLarge">{riskProfileCategory}</TextGlobal>
                             {/* Information Icon */}
-                            <TouchableOpacity onPress={() => showModal()}>
+                            <TouchableOpacity onPress={() => showModal()} testID="info-icon">
                                 <Image style={{ tintColor: 'blue', width: 30, height: 30, marginLeft: 3 }} source={require('../../assets/icon-info.png')} />
                             </TouchableOpacity>
                         </View>

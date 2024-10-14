@@ -9,7 +9,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
-    useColorScheme,
     View,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
@@ -29,14 +28,13 @@ type AssessmentProps = {
 };
 
 const AssessmentScreen: React.FC<AssessmentProps> = ({ route, navigation }) => {
-    const isDarkMode = useColorScheme() === 'dark';
     const onCompleted = (results: { totalScore: number; riskProfileCategory: string }) => {
         // Navigate to Results Screen with results
         navigation.navigate('Result', { results });
     }
 
     return (
-        <View style={styles.AssessmentContainer}>
+        <View testID='assessment-container' style={styles.AssessmentContainer}>
             <HeaderLogo/>
             <QuestionnaireComponent questions={questionsModel} onCompleted={onCompleted} />
         </View>

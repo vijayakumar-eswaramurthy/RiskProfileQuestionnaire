@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Button, HelperText, RadioButton, Text } from 'react-native-paper';
 import { QuestionnaireInterface } from './QuestionnaireInterface';
+import TextGlobal from '../ui/TextGlobal';
+import { useTheme } from '@react-navigation/native';
 
 interface QuestionnaireProps {
   questions: QuestionnaireInterface[];
@@ -23,7 +25,7 @@ const QuestionnaireComponent: React.FC<QuestionnaireProps> = ({ questions, onCom
     if (selectedOptions[questions[currentQuestionIndex].id] !== undefined) {
       setShowHelper(false);
     }
-  }, [currentQuestionIndex,selectedOptions]);
+  }, [currentQuestionIndex, selectedOptions]);
 
   const handleSelectOption = (questionId: string, optionPoints: number) => {
     setSelectedOptions(prev => ({ ...prev, [questionId]: optionPoints }));
@@ -50,28 +52,29 @@ const QuestionnaireComponent: React.FC<QuestionnaireProps> = ({ questions, onCom
   };
 
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
-
+  const {colors} = useTheme();
   return (
     <View>
       <View key={questions[currentQuestionIndex].id}>
-        <Text variant="headlineMedium">{questions[currentQuestionIndex].question}</Text>
+        <TextGlobal variant="headlineMedium">{questions[currentQuestionIndex].question}</TextGlobal>
         <View style={{ height: 10 }} />
         {questions[currentQuestionIndex].options.map(option => (
           <RadioButton.Item
             key={option.id}
             label={option.text}
             value={option.id}
+            labelStyle={{ color: colors.text }} 
             status={selectedOptions[questions[currentQuestionIndex].id] === option.points ? 'checked' : 'unchecked'}
             onPress={() => handleSelectOption(questions[currentQuestionIndex].id, option.points)}
           />
         ))}
       </View>
       <View>
-        {isShowHelper ? (<HelperText type="error" visible={true}>
+        {isShowHelper ? (<HelperText testID='helper-text' type="error" visible={true}>
           {'Please select an option to proceed.'}
         </HelperText>) : null}
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
         {currentQuestionIndex > 0 && <Button mode="contained" onPress={handleBack}>{"Back"}</Button>}
         {!isLastQuestion && <Button mode="contained" onPress={handleNext}>{"Next"}</Button>}
         {isLastQuestion && <Button mode="contained" onPress={handleSubmit}>{"Submit"}</Button>}

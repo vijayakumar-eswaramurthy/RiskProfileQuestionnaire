@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import TextGlobal from '../../components/ui/TextGlobal';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { useTheme } from '@react-navigation/native';
 
 type InfoModalProps = {
   isVisible: boolean,
@@ -9,7 +9,7 @@ type InfoModalProps = {
 }
 
 const InfoModal = ({ isVisible, hideModal }: InfoModalProps) => {
-
+  const { colors } = useTheme();
   return (
     <View>
       {/* Modal Dialog */}
@@ -19,7 +19,7 @@ const InfoModal = ({ isVisible, hideModal }: InfoModalProps) => {
         visible={isVisible}
         onRequestClose={() => hideModal()}
       >
-        <View style={styles.modalView}>
+        <View style={[styles.modalView, { backgroundColor: colors.background }]}>
           <View>
             <TouchableOpacity
               style={styles.closeButton}
@@ -55,7 +55,6 @@ const InfoModal = ({ isVisible, hideModal }: InfoModalProps) => {
 const styles = StyleSheet.create({
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
