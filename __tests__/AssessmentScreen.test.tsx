@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import QuestionnaireComponent from '../src/components/QuestionnaireComponent/QuestionnaireComponent';
 import { QuestionnaireInterface } from '../src/components/QuestionnaireComponent/QuestionnaireInterface';
 import HeaderLogo from '../src/components/headerLogo/HeaderLogo';
@@ -29,76 +29,86 @@ const mockQuestions: QuestionnaireInterface[] = [
 ];
 
 describe('QuestionnaireComponent', () => {
-  it('should render the first question correctly', () => {
-    const { getByText } = render(
-      <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
-    );
+  it('should render the first question correctly', async () => {
+    await waitFor(async () => {
+      const { getByText } = render(
+        <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
+      );
 
-    expect(getByText('Question 1?')).toBeTruthy();
-    expect(getByText('Option 1')).toBeTruthy();
-    expect(getByText('Option 2')).toBeTruthy();
+      expect(getByText('Question 1?')).toBeTruthy();
+      expect(getByText('Option 1')).toBeTruthy();
+      expect(getByText('Option 2')).toBeTruthy();
+    });
   });
 
   it('should show helper text if no option is selected and Next is pressed', async () => {
-    const { getByText, getByTestId } = render(
-      <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
-    );
+    await waitFor(async () => {
+      const { getByText, getByTestId } = render(
+        <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
+      );
 
-    await act(async () => { fireEvent.press(getByText('Next')); });
-    expect(getByTestId('helper-text')).toBeTruthy();
-    expect(getByText('Please select an option to proceed.')).toBeTruthy();
+      await waitFor(async () => { fireEvent.press(getByText('Next')); });
+      expect(getByTestId('helper-text')).toBeTruthy();
+      expect(getByText('Please select an option to proceed.')).toBeTruthy();
+    });
   });
 
   it('should navigate to the next question when an option is selected and Next is pressed', async () => {
-    const { getByText } = render(
-      <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
-    );
+    await waitFor(async () => {
+      const { getByText } = render(
+        <QuestionnaireComponent questions={mockQuestions} onCompleted={jest.fn()} />
+      );
 
-    await act(async () => {
-      fireEvent.press(getByText('Option 1'));
+      await waitFor(async () => {
+        fireEvent.press(getByText('Option 1'));
+      });
+
+      await waitFor(async () => {
+        fireEvent.press(getByText('Next'));
+      });
+
+      expect(getByText('Question 2?')).toBeTruthy();
     });
-
-    await act(async () => {
-      fireEvent.press(getByText('Next'));
-    });
-
-    expect(getByText('Question 2?')).toBeTruthy();
   });
 
   it('should call onCompleted with the correct results when Submit is pressed', async () => {
-    const onCompleted = jest.fn();
-    const { getByText } = render(
-      <QuestionnaireComponent questions={mockQuestions} onCompleted={onCompleted} />
-    );
+    await waitFor(async () => {
+      const onCompleted = jest.fn();
+      const { getByText } = render(
+        <QuestionnaireComponent questions={mockQuestions} onCompleted={onCompleted} />
+      );
 
-    await act(async () => {
-      fireEvent.press(getByText('Option 1'));
-    });
+      await waitFor(async () => {
+        fireEvent.press(getByText('Option 1'));
+      });
 
-    await act(async () => {
-      fireEvent.press(getByText('Next'));
-    });
-    await act(async () => {
-      fireEvent.press(getByText('Option 2'));
-    });
-    await act(async () => {
-      fireEvent.press(getByText('Submit'));
-    });
+      await waitFor(async () => {
+        fireEvent.press(getByText('Next'));
+      });
+      await waitFor(async () => {
+        fireEvent.press(getByText('Option 2'));
+      });
+      await waitFor(async () => {
+        fireEvent.press(getByText('Submit'));
+      });
 
-    expect(onCompleted).toHaveBeenCalledWith({
-      totalScore: 3,
-      riskProfileCategory: 'Low',
+      expect(onCompleted).toHaveBeenCalledWith({
+        totalScore: 3,
+        riskProfileCategory: 'Low',
+      });
     });
   });
 });
 
 describe('HeaderLogoComponent', () => {
-  it('should render the Header logo correctly', () => {
-    const { getByText } = render(
-      <HeaderLogo />
-    );
+  it('should render the Header logo correctly', async () => {
+    await waitFor(async () => {
+      const { getByText } = render(
+        <HeaderLogo />
+      );
 
-    expect(getByText('Risk Profiler')).toBeTruthy();
+      expect(getByText('Risk Profiler')).toBeTruthy();
+    });
   });
 });
 
@@ -134,15 +144,16 @@ const createTestProps = (props: object) => ({
 
 
 describe('AssessmentScreen Component', () => {
-  it('should render correctly', () => {
-    const props = createTestProps({});
-    const { getByTestId } = render(
-      <NavigationContainer>
-        <AssessmentScreen {...props} />
-      </NavigationContainer>
-    );
+  it('should render correctly', async () => {
+    await waitFor(async () => {
+      const props = createTestProps({});
+      const { getByTestId } = render(
+        <NavigationContainer>
+          <AssessmentScreen {...props} />
+        </NavigationContainer>
+      );
 
-    expect(getByTestId('assessment-container')).toBeTruthy();
+      expect(getByTestId('assessment-container')).toBeTruthy();
+    });
   });
-
 })
